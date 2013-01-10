@@ -159,10 +159,11 @@ class QActiveRecord extends CActiveRecord
      * $model('person.user.id')
      *
      * @param $valuePath
+     * @param $default
      * @return mixed
      */
-    public function __invoke($valuePath)
+    public function __invoke($valuePath, $default = null)
     {
-        return CHtml::value($this, $valuePath);
+        return CHtml::value($this, trim($valuePath, '.'), $default);
     }    
 }
