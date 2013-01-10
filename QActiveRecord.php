@@ -164,6 +164,13 @@ class QActiveRecord extends CActiveRecord
      */
     public function __invoke($valuePath, $default = null)
     {
-        return CHtml::value($this, trim($valuePath, '.'), $default);
-    }    
+        try
+        {
+            return CHtml::value($this, trim($valuePath, '.'), $default);
+        }
+        catch(Exception $e)
+        {
+            return $default;
+        }
+    }
 }
