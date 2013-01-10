@@ -153,4 +153,16 @@ class QActiveRecord extends CActiveRecord
         //а вот тут сверху перепишем предустановленными нами атрибутами, плюя на safe
         parent::setAttributes($this->getPreSetAttributes(), true);
     }
+    
+    /**
+     * Считаем, что таким образом будут запрашиваться значение
+     * $model('person.user.id')
+     *
+     * @param $valuePath
+     * @return mixed
+     */
+    public function __invoke($valuePath)
+    {
+        return CHtml::value($this, $valuePath);
+    }    
 }
