@@ -153,7 +153,7 @@ class QActiveRecord extends CActiveRecord
         //а вот тут сверху перепишем предустановленными нами атрибутами, плюя на safe
         parent::setAttributes($this->getPreSetAttributes(), true);
     }
-    
+
     /**
      * Считаем, что таким образом будут запрашиваться значение
      * $model('person.user.id')
@@ -172,5 +172,34 @@ class QActiveRecord extends CActiveRecord
         {
             return $default;
         }
+    }
+
+    /**
+     * Scope (именованная группа) для получение последнего созданного элемента
+     * @param null $alias
+     * @return $this
+     */
+    public function lastCreated($alias = null)
+    {
+        $alias === null && $alias = $this->tableAlias;
+        $alias = trim($alias, '.') . '.';
+        $this->getDbCriteria()->mergeWith(array(
+                                               'order' => $alias . 'created DESC',
+                                               'limit' => 1,
+                                          ));
+
+        return $this;
+    }
+
+    /**
+     * Проверяет имеют ли два объетка одинаковые атрибуты
+     * @param CActiveRecord $a
+     * @param array $attr список атрибутов, по которым будет осуществляться сравнение
+     * @return bool
+     */
+    public function equalsAttributes(CActiveRecord $a, array $attr = array())
+    {
+        !$attr && $attr = true;
+        return (bool)array_intersect_assoc($this->getAttributes($attr), $a->getAttributes($attr));
     }
 }
